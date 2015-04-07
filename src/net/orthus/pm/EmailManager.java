@@ -90,7 +90,7 @@ public class EmailManager {
 		
 		String time;
 		
-		if(d.getDayOfTheWeek().equals(Date.SATURDAY) && d.getHour() > 13){
+		if(d.getDayOfTheWeek().equals(Date.SATURDAY) && d.getHour() > 16){
 			
 			if(two.isUSPSHoliday())
 				time = "Tuesday, " + three.getMonthString() + " " + three.getDay() +
@@ -113,7 +113,7 @@ public class EmailManager {
 				"<p style=\"color:#696969;\">Dear %s,<br><br>The repair was a success and will ship %s. " +
 			    "Your USPS tracking number is <a style=\"color:#A37A00; text-decoration:none;\" href=\"" +
 				"https://tools.usps.com/go/TrackConfirmAction.action?tRef=fullpage&tLc=1&tLabels=%s\">" +
-			    "%s</a>.<br><br>Next time save money by using our website at <a href='http://www.orthus.net' " +
+			    "%s</a>.<br><br>If you used Ebay, save money on your next repair by using our website at <a href='http://www.orthus.net' " +
 			    "style='color:#A37A00; text-decoration:none;'>orthus.net</a>.<br><br>We really appreciate your business " +
 				"and seek your 5-star positive feedback. If there are any problems or concerns please contact us " +
 			    " so we can make it right. Thanks again and have a great day!<br>" +

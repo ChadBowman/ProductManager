@@ -127,6 +127,90 @@ public class Repair extends Item {
 		return null;
 	}
 	
+	public void movePartToSupply(Part toMove){
+		
+		Part pt = assembly.findPartBySerial(toMove);
+		
+		if(pt == null) return; //No such part on Product to move
+		
+		Part clone = new Part(pt); //Copy of what exists in Product
+		clone.setStatus(Part.SUPPLY);
+		
+		if(toMove.getQuantity() < pt.getQuantity()){ //Decrement part
+			
+			pt.setQuantity(pt.getQuantity() - toMove.getQuantity()); //Decrement Product part
+			getParent().getProductCategory().addPartToSupply(clone);
+		
+			
+		}else if(toMove.getQuantity() == pt.getQuantity()){ //Move entire part
+
+			clone.setQuantity(pt.getQuantity());
+			getParent().getProductCategory().addPartToSupply(clone); //Add to supply
+			assembly.removePart(pt); //Remove from Product
+			
+		}else{ //Request to move more than available made
+			
+			System.err.println("Request to move more parts than existed occured.");
+		}
+		
+	}//End movePartToSupply()
+	
+	public void movePartFromSupply(Part toMove, int quantity){
+		if(getParent().getProductCategory().getPartSupply() == null) return; //No supply, no part
+		
+		
+		Part pt = getParent().getProductCategory().getPartSupply().findEquivalentPartFromSupply(toMove);
+		
+		if(pt == null) return; //No such part in supply
+		
+		Part clone = new Part(toMove);
+		clone.setStatus(Part.HOLD);
+
+		
+		if(pt.getQuantity() > quantity){ //Decrement from supply
+			
+			pt.setQuantity(pt.getQuantity() - quantity); //Decrement supply
+			assembly.addPart(clone);	//Add to product
+			
+		}else if(pt.getQuantity() == quantity){ //Remove from supply
+			
+			getParent().getProductCategory().removePartFromSupply(pt);
+			assembly.addPart(clone);
+			
+		}else{ //Insufficient parts in supply
+			
+			getParent().getProductCategory().removePartFromSupply(pt);
+			clone.setQuantity(pt.getQuantity());
+			assembly.addPart(clone);
+			
+			OptionPane.showError("Not enough parts in supply!\nRequested " 
+					+ quantity + ", delivered" + pt.getQuantity() + ".", "Insufficient Parts!");
+			
+		}
+	}//End movePartFromSupply()
+	
+	public void moveAssemblyToSupply(Assembly temp){
+		
+		Part[] pts = temp.collapseAssembly();
+		
+		if(pts != null)
+			for(int i=0; i<pts.length; i++)
+				movePartToSupply(pts[i]);
+		
+	}//End moveAssemblyToSupply()
+	
+	public void moveAssemblyFromSupply(Assembly temp){
+		if(getParent().getProductCategory().getPartSupply() == null) return;
+		
+	
+		getParent().getProductCategory().removeSimilarAssemblyFromSupply(temp);
+		Assembly a = new Assembly(temp);
+		a.setStatus(Assembly.HOLD);
+		assembly.addAssembly(new Assembly(a));
+		System.out.println("Moving " + a.getName() + " " + a.getTotalCost().toString());
+		
+	}//End moveAssemblyFromSupply()
+	
 	public String record(){
 	
 		String fv = (finalValueFee == null)? "#cnull" : finalValueFee.record();

@@ -2,6 +2,7 @@ package net.orthus.pm;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.IllegalFormatConversionException;
@@ -73,7 +74,7 @@ public class FileExchangeCreator {
 			default: System.err.println("No category number for this color: " + p.getOverallColor());
 			}
 	
-			storeCategory = "4845392016"; //DSL Products
+			storeCategory = "6317431016"; //DSL Products
 			break;
 		
 		case "DSi":
@@ -94,7 +95,7 @@ public class FileExchangeCreator {
 			default: System.err.println("No category number for this color: " + p.getOverallColor());
 			}
 			
-			storeCategory = "4845390016"; //DSi Products
+			storeCategory = "6317430016"; //DSi Products
 			break;
 		
 		case "DSi XL":
@@ -118,7 +119,7 @@ public class FileExchangeCreator {
 			default: System.err.println("No category number for this color: " + p.getOverallColor());
 			}
 			
-			storeCategory = "4845388016"; //DSi XL Products
+			storeCategory = "6317429016"; //DSi XL Products
 			break;
 			
 		case "3DS":
@@ -147,7 +148,7 @@ public class FileExchangeCreator {
 			default: System.err.println("No category number for this color: " + p.getOverallColor());
 			}
 			
-			storeCategory = "4845384016"; //3DS Products
+			storeCategory = "6317428016"; //3DS Products
 			break;
 			
 		case "3DS XL":
@@ -167,15 +168,18 @@ public class FileExchangeCreator {
 				ePID = "116002572"; break;
 			case "Luigi":
 				color = color + "Mario & Luigi Dream Time Silver RARE!";
-				ePID="176271438"; break;
+				ePID = "176271438"; break;
+			case "Black":
+				color = color + "Solid Black RARE!"; 
+				ePID = "139971"; break;
 			default: System.err.println("No category number for this color: " + p.getOverallColor());
 			}
 			
-			storeCategory = "4845380016"; //3DS XL Products
+			storeCategory = "6317427016"; //3DS XL Products
 			break;
 		}
 		
-		color = color.concat("Trade-ins Welcome! ");
+		color = color.concat(" Trade-ins Welcome! ");
 		if(p.getNote() != null)
 			if(p.getNote().contains("4.") 
 					|| p.getNote().contains("3.")
@@ -189,6 +193,7 @@ public class FileExchangeCreator {
 			writeListing(ePID,
 						false,
 					 	color,
+					 	Database.getProductDescriptionTemplate(),
 					 	description,
 					 	p.getOverallQuality(),
 					 	conditionID,
@@ -201,15 +206,15 @@ public class FileExchangeCreator {
 					 	instructions,
 					 	storeCategory,
 					 	"",
-					 	"14 Days",
+					 	"14 Day",
 					 	"10",
 					 	p.getFullName(),
 					 	"FR Envelope",
-					 	"0",
+					 	"0,0",
 					 	"FR Box",
-					 	"1.00",
+					 	"1.00,0",
 					 	"Express",
-					 	"10.00",
+					 	"10.00,0",
 					 	picURLs);
 			
 		} catch (IOException e) {
@@ -245,19 +250,19 @@ public class FileExchangeCreator {
 			
 			switch(Database.getFocusedCategory().getName()){
 			case ProductCategory.DS_LITE:
-				storeCat = "4845466016"; break;//DSL Accessories
+				storeCat = "4845379016"; break;//DSL Accessories
 				
 			case ProductCategory.DSI:
-				storeCat = "4845465016"; break; //DSi Accessories
+				storeCat = "4390840016"; break; //DSi Accessories
 				
 			case ProductCategory.DSI_XL:
-				storeCat = "4845459016"; break; //DSi XL Accessories
+				storeCat = "4390841016"; break; //DSi XL Accessories
 				
 			case ProductCategory.DS3:
-				storeCat = "4845458016"; break; //3DS Accessories
+				storeCat = "4390842016"; break; //3DS Accessories
 				
 			case ProductCategory.DS3_XL:
-				storeCat = "4845457016"; break; //3DS XL Accessories
+				storeCat = "4390843016"; break; //3DS XL Accessories
 				
 			default:
 				storeCat = "1"; //Other
@@ -266,19 +271,19 @@ public class FileExchangeCreator {
 			category = "171833"; //ReplacementParts & tools
 			switch(Database.getFocusedCategory().getName()){
 			case ProductCategory.DS_LITE:
-				storeCat = "4845393016"; break;//DSL Parts
+				storeCat = "4845379016"; break;//DSL Parts
 				
 			case ProductCategory.DSI:
-				storeCat = "4845391016"; break; //DSi Parts
+				storeCat = "4390840016"; break; //DSi Parts
 				
 			case ProductCategory.DSI_XL:
-				storeCat = "4845389016"; break; //DSi XL Parts
+				storeCat = "4390841016"; break; //DSi XL Parts
 				
 			case ProductCategory.DS3:
-				storeCat = "4845385016"; break; //3DS Parts
+				storeCat = "4390842016"; break; //3DS Parts
 				
 			case ProductCategory.DS3_XL:
-				storeCat = "4845381016"; break; //3DS XL Parts
+				storeCat = "4390843016"; break; //3DS XL Parts
 				
 			default:
 				storeCat = "1"; //Other
@@ -288,8 +293,12 @@ public class FileExchangeCreator {
 		String q = null;
 		try{
 			q = ((Part) c).getQuality();
+		
+			 if(((Part) c).getQuality() == null) 
+				 q = "B";	// Part with no quality
+			
 		}catch(ClassCastException e){
-			q = "A+";
+			q = "A+";	// Assembly
 		}
 		
 		
@@ -297,6 +306,7 @@ public class FileExchangeCreator {
 			writeListing(category,
 						 false,
 						 title,
+						 Database.getPartDescriptionTemplate(),
 						 description,
 						 q,
 						 conditionID,
@@ -330,6 +340,7 @@ public class FileExchangeCreator {
 	public void writeListing(String epid,
 							  boolean productInfo,
 						   	  String title,
+						   	  String conditionTemp,
 							  String description,
 							  String conditionAlph,
 							  String conditionID,
@@ -361,7 +372,7 @@ public class FileExchangeCreator {
 		
 		datestamp = datestamp.replace(" ", "0");
 		
-		File file = new File("C:/Users/Jack Harper/Documents/Orthus/List/" + datestamp);
+		File file = new File("C:/Users/Chad/Desktop/" + datestamp);
 		
 		if(!file.exists()){
 			w = new BufferedWriter(new FileWriter(file));
@@ -371,8 +382,8 @@ public class FileExchangeCreator {
 			w.append("Product:EPID,");
 			w.append("*Category,");
 			w.append("Product:IncludePreFilledItemInformation,");
-			w.append("Title,");
-			w.append("Description,");
+			w.append("*Title,");
+			w.append("*Description,");
 			w.append("*ConditionID,");
 			w.append("ConditionDescription,");
 			w.append("PicURL,");
@@ -392,17 +403,17 @@ public class FileExchangeCreator {
 			w.append("ShippingService-1:Option,");
 			w.append("ShippingService-1:Cost,");
 			w.append("ShippingService-1:AdditionalCost,");
-			w.append("ShippingService-1:Priority=1,");
+			w.append("ShippingService-1:Priority,");
 			w.append("ShippingService-2:Option,");
 			w.append("ShippingService-2:Cost,");
 			w.append("ShippingService-2:AdditionalCost,");
-			w.append("ShippingService-2:Priority=2,");
+			w.append("ShippingService-2:Priority,");
 			w.append("ShippingService-3:Option,");
 			w.append("ShippingService-3:Cost,");
 			w.append("ShippingService-3:AdditionalCost,");
-			w.append("ShippingService-3:Priority=3,");
-			w.append("DispatchTimeMax=1,");
-			w.append("ReturnsAcceptedOption,");
+			w.append("ShippingService-3:Priority,");
+			w.append("*DispatchTimeMax=1,");
+			w.append("*ReturnsAcceptedOption,");
 			w.append("RefundOption,");
 			w.append("ReturnsWithinOption,");
 			w.append("ShippingCostPaidByOption,");
@@ -410,8 +421,15 @@ public class FileExchangeCreator {
 			w.append("WeightMinor,");
 			w.append("CustomLabel\n");
 		}else{
-			w = new BufferedWriter(new FileWriter(file, true));
-			w.append("\n");
+			try{
+				w = new BufferedWriter(new FileWriter(file, true));
+				w.append("\n");
+				
+			}catch(FileNotFoundException e){
+				
+				OptionPane.showError("File is being used by another program!", "Write Failed!");
+				return;
+			}
 		}
 		
 		
@@ -421,17 +439,15 @@ public class FileExchangeCreator {
 		w.append("Add,");
 		
 		//Catalog or Category
-		if(epid.length() == 9)
+		if(epid.length() == 9){
 			w.append(epid + ",,");  //Product Catalog ID
-		else
-			w.append("," + epid + ",");
-
-		
-		//Pre-filled Product Info
-		if(productInfo)
-			w.append("1,");
-		else
-			w.append("0,");
+			
+			if(productInfo)
+				w.append("1,");
+			else
+				w.append("0,");
+		}else
+			w.append("," + epid + ",,");
 		
 		
 		
@@ -460,27 +476,32 @@ public class FileExchangeCreator {
 		//Shipping section
 		String shiphtml = "USPS " + ship1Option.replace("FR", "Priority Flat Rate") + ": ";
 		
-		if(new Credit(ship1Cost).getValueInCents() == 0)
+		String[] s1 = ship1Cost.split(",");
+		String[] s2 = ship2Cost.split(",");	
+		String[] s3 = ship3Cost.split(",");	
+		
+		
+		if(new Credit(s1[0]).getValueInCents() == 0)
 			shiphtml = shiphtml.concat("FREE!<br>");
 		else
-			shiphtml = shiphtml.concat(new Credit(ship1Cost).toString() + "<br>");
+			shiphtml = shiphtml.concat(new Credit(s1[0]).toString() + "<br>");
 		
 		if(!ship2Option.equals("None"))
-			if(new Credit(ship2Cost).getValueInCents() == 0)
+			if(new Credit(s2[0]).getValueInCents() == 0)
 				shiphtml = shiphtml.concat("USPS " + ship2Option.replace("FR", "Priority Flat Rate") + ": FREE!<br>");
 			else
-				shiphtml = shiphtml.concat("USPS " + ship2Option.replace("FR", "Priority Flat Rate") + ": " + new Credit(ship2Cost).toString() + "<br>");
+				shiphtml = shiphtml.concat("USPS " + ship2Option.replace("FR", "Priority Flat Rate") + ": " + new Credit(s2[0]).toString() + "<br>");
 		
 		if(!ship3Option.equals("None"))
-			if(new Credit(ship3Cost).getValueInCents() == 0)
+			if(new Credit(s3[0]).getValueInCents() == 0)
 				shiphtml = shiphtml.concat("USPS " + ship3Option.replace("FR", "Priority Flat Rate") + ": FREE!<br>");
 			else
-				shiphtml = shiphtml.concat("USPS " + ship3Option.replace("FR", "Priority Flat Rate") + ": " + new Credit(ship3Cost).toString() + "<br>");
+				shiphtml = shiphtml.concat("USPS " + ship3Option.replace("FR", "Priority Flat Rate") + ": " + new Credit(s3[0]).toString() + "<br>");
 		
 		String des = "";
 		try{
 			
-			des = String.format(Database.getProductDescriptionTemplate(),
+			des = String.format(conditionTemp,
 					gallery, conditionAlph, description, shiphtml, label);
 			
 		}catch(IllegalFormatConversionException e){ //If user-modified format creates problem
@@ -554,29 +575,29 @@ public class FileExchangeCreator {
 		
 		//Shipping Option 1
 		switch(ship1Option){
-		case "First Class": w.append("USPSFirstClass," + ship1Cost + ",,,"); break;
-		case "FR Envelope": w.append("USPSPriorityFlatRateEnvelope," + ship1Cost + ",,,"); break;
-		case "FR Box": w.append("USPSPriorityMailSmallFlatRateBox," + ship1Cost + ",,,"); break;
-		case "Express": w.append("USPSExpressFlatRateEnvelope," + ship1Cost + ",,,"); break;
+		case "First Class": w.append("USPSFirstClass," + ship1Cost  + ",1,"); break;
+		case "FR Envelope": w.append("USPSPriorityFlatRateEnvelope," + ship1Cost + ",1,"); break;
+		case "FR Box": w.append("USPSPriorityMailSmallFlatRateBox," + ship1Cost + ",1,"); break;
+		case "Express": w.append("USPSExpressFlatRateEnvelope," + ship1Cost + ",1,"); break;
 		case "None": w.append(",,,,");
 		}
 		
 		//Shipping Option 2
 		switch(ship2Option){
-		case "First Class": w.append("USPSFirstClass," + ship2Cost + ",,,"); break;
-		case "FR Envelope": w.append("USPSPriorityFlatRateEnvelope," + ship2Cost + ",,,"); break;
-		case "FR Box": w.append("USPSPriorityMailSmallFlatRateBox," + ship2Cost + ",,,"); break;
-		case "Express": w.append("USPSExpressFlatRateEnvelope," + ship2Cost + ",,,"); break;
+		case "First Class": w.append("USPSFirstClass," + ship2Cost + ",2,"); break;
+		case "FR Envelope": w.append("USPSPriorityFlatRateEnvelope," + ship2Cost + ",2,"); break;
+		case "FR Box": w.append("USPSPriorityMailSmallFlatRateBox," + ship2Cost + ",2,"); break;
+		case "Express": w.append("USPSExpressFlatRateEnvelope," + ship2Cost + ",2,"); break;
 		case "None": w.append(",,,,");
 		}
 		
 		
 		//Shipping Option 3
 		switch(ship3Option){
-		case "First Class": w.append("USPSFirstClass," + ship3Cost + ",,,"); break;
-		case "FR Envelope": w.append("USPSPriorityFlatRateEnvelope," + ship3Cost + ",,,"); break;
-		case "FR Box": w.append("USPSPriorityMailSmallFlatRateBox," + ship3Cost + ",,,"); break;
-		case "Express": w.append("USPSExpressFlatRateEnvelope," + ship3Cost + ",,,"); break;
+		case "First Class": w.append("USPSFirstClass," + ship3Cost + ",3,"); break;
+		case "FR Envelope": w.append("USPSPriorityFlatRateEnvelope," + ship3Cost + ",3,"); break;
+		case "FR Box": w.append("USPSPriorityMailSmallFlatRateBox," + ship3Cost + ",3,"); break;
+		case "Express": w.append("USPSExpressFlatRateEnvelope," + ship3Cost + ",3,"); break;
 		case "None": w.append(",,,,");
 		}
 		
@@ -587,8 +608,8 @@ public class FileExchangeCreator {
 		//Return Policy and Global Shipping
 		switch(refunds){
 		case "No Returns": w.append("ReturnsNotAccepted,,,,,"); break;
-		case "14 Days": w.append("ReturnsAccepted,MoneyBack,Days_14,Buyer,,"); break;
-		case "30 Days": w.append("ReturnsAccepted,MoneyBack,Days_30,Buyer,,"); break;
+		case "14 Day": w.append("ReturnsAccepted,MoneyBack,Days_14,Buyer,,"); break;
+		case "30 Day": w.append("ReturnsAccepted,MoneyBack,Days_30,Buyer,,"); break;
 		}
 		
 		//Weight Minor 

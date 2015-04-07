@@ -75,19 +75,19 @@ public class ListPart extends ActionFrame
 		
 		JPanel ship11 = new JPanel(new GridLayout());
 		ship11.add(ship1 = new ComboBox<String>(null, ships, null, -1, "Shipping Op 1"));
-		ship11.add(cost1 = new TextField("0.00", "CX Cost"));
+		ship11.add(cost1 = new TextField("0.00,0.00", "CX, Add Cost"));
 		left.add(ship11);
 		
 		JPanel ship22 = new JPanel(new GridLayout());
 		ship22.add(ship2 = new ComboBox<String>(null, ships2, null, -1, "Shipping Op 2"));
 		ship2.setSelectedIndex(2);
-		ship22.add(cost2 = new TextField("3.50", "CX Cost"));
+		ship22.add(cost2 = new TextField("3.50,0.00", "CX, Add Cost"));
 		left.add(ship22);
 		
 		JPanel ship33 = new JPanel(new GridLayout());
 		ship33.add(ship3 = new ComboBox<String>(null, ships2, null, -1, "Shipping Op 3"));
 		ship3.setSelectedIndex(4);
-		ship33.add(cost3 = new TextField( "12.00", "CX Cost"));
+		ship33.add(cost3 = new TextField( "12.00,0.00", "CX, Add Cost"));
 		left.add(ship33);
 		
 		GridBagConstraints g = new GridBagConstraints();
@@ -103,7 +103,7 @@ public class ListPart extends ActionFrame
 		cen.add(im = new ImageManager(ImageManager.PART), BorderLayout.CENTER);
 		JScrollPane sc = new JScrollPane(cond = new JTextArea());
 		sc.setPreferredSize(new Dimension(425, 75));
-		rightBot.add(title = new TextField("", "Title"), BorderLayout.PAGE_START);
+		rightBot.add(title = new TextField("Nintendo " + c.getName() + " " + p.getName(), "Title"), BorderLayout.PAGE_START);
 		rightBot.add(sc, BorderLayout.CENTER);
 		JPanel buttons = new JPanel(new GridLayout(1,0));
 		buttons.add(new Button("Upload Images", this, 2));
@@ -227,9 +227,9 @@ public class ListPart extends ActionFrame
 			if(FormatChecker.creditCheck(amt.getText())
 					&& FormatChecker.quantityCheck(dur.getText())
 					&& FormatChecker.quantityCheck(per.getText())
-					&& FormatChecker.creditCheck(cost1.getText())
-					&& FormatChecker.creditCheck(cost2.getText())
-					&& FormatChecker.creditCheck(cost3.getText())
+					&& FormatChecker.commaCostCheck(cost1.getText())
+					&& FormatChecker.commaCostCheck(cost2.getText())
+					&& FormatChecker.commaCostCheck(cost3.getText())
 					&& FormatChecker.creditCheck(fee.getText())
 					&& FormatChecker.dateCheck(date.getText())
 					&& FormatChecker.quantityCheck(weight.getText())
@@ -285,6 +285,7 @@ public class ListPart extends ActionFrame
 					Database.addToEbayBalance(new Date(date.getText()).getMonth(), 
 							new Credit(fee.getText()));
 				 
+					
 					if(file.isSelected())
 						new FileExchangeCreator().listPart(
 								tit,
@@ -297,11 +298,11 @@ public class ListPart extends ActionFrame
 								(String) refund.getSelectedItem(),
 								weight.getText(),
 								(String) ship1.getSelectedItem(),
-								cost1.getSelectedText(),
+								cost1.getText(),
 								(String) ship2.getSelectedItem(),
-								cost2.getSelectedText(),
+								cost2.getText(),
 								(String) ship3.getSelectedItem(),
-								cost3.getSelectedText(),
+								cost3.getText(),
 								picURL,
 								acc.isSelected(),
 								p);
@@ -356,11 +357,11 @@ public class ListPart extends ActionFrame
 								(String) refund.getSelectedItem(),
 								weight.getText(),
 								(String) ship1.getSelectedItem(),
-								cost1.getSelectedText(),
+								cost1.getText(),
 								(String) ship2.getSelectedItem(),
-								cost2.getSelectedText(),
+								cost2.getText(),
 								(String) ship3.getSelectedItem(),
-								cost3.getSelectedText(),
+								cost3.getText(),
 								picURL,
 								acc.isSelected(),
 								clone);

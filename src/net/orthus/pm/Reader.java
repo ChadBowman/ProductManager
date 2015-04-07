@@ -98,6 +98,7 @@ public class Reader{
 		Database.setTimeStamps(parseTimeStampArray(getLine().substring(2)));
 		Database.setProductDescriptionTemplate(getLine());
 		Database.setPartDescriptionTemplate(getLine());
+		Database.setGenDescriptionTemplate(getLine());
 		
 		return true;
 	}

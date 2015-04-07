@@ -114,8 +114,6 @@ public class SummaryBuilder{
 		monthProfit3.setFont(FontManager.getStatisticFont());
 		monthProfit3.setBorder(new EmptyBorder(0,40,0,0));
 		
-		Credit rev = stat.getMonthRevenue();
-		System.out.println(todaysDate.getMonthString() + " Revenue " + rev.toString());
 		
 		try{
 			mper = Double.parseDouble(stat.getMonthPercentage()) / 100;

@@ -54,17 +54,16 @@ public class GenericList extends ActionFrame
 		left.add(pan0);
 		
 		//Return Policy
-		String[] rets = {"14 Days", "30 Days", "No Returns"};
+		String[] rets = {"14 Day", "30 Day", "No Returns"};
 		left.add(returns = new ComboBox<String>(null, rets, null, -1, "Return Policy"));
 		
 		JPanel pan = new JPanel(new GridLayout());
 		//Condition
 		String[] ar = {"New", "New With Defects", "Used", "Good", "Acceptable", "Not Working"};
 		pan.add(condid = new ComboBox<String>(null, ar, null, -1, "Condition")); 
-		condid.setSelectedIndex(4);
+		
 		//Quality
-		pan.add(qual = new ComboBox<String>(null, Part.getQualityArray(), 
-				this, 5, "Quality"));
+		pan.add(qual = new ComboBox<String>(null, Part.getQualityArray(), this, 5, "Quality"));
 		qual.setSelectedIndex(3);
 		left.add(pan);
 		
@@ -74,19 +73,19 @@ public class GenericList extends ActionFrame
 		
 		JPanel ship11 = new JPanel(new GridLayout());
 		ship11.add(ship1 = new ComboBox<String>(null, ships, null, -1, "Shipping Op 1"));
-		ship11.add(cost1 = new TextField("0.00", "CX Cost"));
+		ship11.add(cost1 = new TextField("2.00,0.00", "CX, Add Cost"));
 		left.add(ship11);
 		
 		JPanel ship22 = new JPanel(new GridLayout());
 		ship22.add(ship2 = new ComboBox<String>(null, ships2, null, -1, "Shipping Op 2"));
 		ship2.setSelectedIndex(2);
-		ship22.add(cost2 = new TextField("3.50", "CX Cost"));
+		ship22.add(cost2 = new TextField("5.00,0.00", "CX, Add Cost"));
 		left.add(ship22);
 		
 		JPanel ship33 = new JPanel(new GridLayout());
 		ship33.add(ship3 = new ComboBox<String>(null, ships2, null, -1, "Shipping Op 3"));
 		ship3.setSelectedIndex(4);
-		ship33.add(cost3 = new TextField( "12.00", "CX Cost"));
+		ship33.add(cost3 = new TextField( "20.00,0.00", "CX, Add Cost"));
 		left.add(ship33);
 		
 		GridBagConstraints g = new GridBagConstraints();
@@ -170,7 +169,7 @@ public class GenericList extends ActionFrame
 	//----- Methods
 	public static void initializeFrame(){
 		
-		if(!new File("E:/DCIM/100CANON").exists()){
+		if(!new File("D:/DCIM/100CANON").exists()){
 			
 			OptionPane.showError("Please insert the correct SD card.", "File System Error");
 			return;
@@ -209,9 +208,9 @@ public class GenericList extends ActionFrame
 					&& FormatChecker.quantityCheck(quant.getText())
 					&& FormatChecker.stringCheck(title.getText())
 					&& FormatChecker.quantityCheck(epid.getText())
-					&& FormatChecker.creditCheck(cost1.getText())
-					&& FormatChecker.creditCheck(cost2.getText())
-					&& FormatChecker.creditCheck(cost3.getText())
+					&& FormatChecker.commaCostCheck(cost1.getText())
+					&& FormatChecker.commaCostCheck(cost2.getText())
+					&& FormatChecker.commaCostCheck(cost3.getText())
 					&& FormatChecker.quantityCheck(weight.getText())
 					&& FormatChecker.stringCheck(instruction.getText())){
 				
@@ -235,6 +234,7 @@ public class GenericList extends ActionFrame
 					new FileExchangeCreator().writeListing(epid.getText(),
 														   true,
 														   tit,
+														   Database.getGenericDescriptionTemplate(),
 														   con,
 														   (String) qual.getSelectedItem(),
 														   (String) condid.getSelectedItem(),
@@ -328,7 +328,7 @@ public class GenericList extends ActionFrame
 				returns.setSelectedIndex(2);
 				
 			}else{
-				condid.setSelectedIndex(1);
+				condid.setSelectedIndex(2);
 				returns.setSelectedIndex(0);
 				
 			}

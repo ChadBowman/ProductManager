@@ -205,6 +205,7 @@ public class Part extends Constituent
 		return ret;
 	}
 	
+	
 	//Static
 	public static Part[] cloneArray(Part[] array){
 		if(array == null) return null;
@@ -223,6 +224,7 @@ public class Part extends Constituent
 		
 		return ret;
 	}
+	
 	
 	//----- Interfaces
 	public boolean equiv(Part o){

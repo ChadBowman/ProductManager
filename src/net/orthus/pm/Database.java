@@ -36,6 +36,7 @@ public class Database {
 	private static Credit totalInvestment;
 	private static String productDescriptionTemplate;
 	private static String partDescriptionTemplate;
+	private static String genDescriptionTemplate;
 	public static boolean onTheClock = false;
 	
 	//Class utility
@@ -72,6 +73,7 @@ public class Database {
 	public static TimeStamp[] getTimeStamps(){ return stamps; }
 	public static String getProductDescriptionTemplate(){ return productDescriptionTemplate; }
 	public static String getPartDescriptionTemplate(){ return partDescriptionTemplate; }
+	public static String getGenericDescriptionTemplate(){ return genDescriptionTemplate; }
 	public static Assembly getShippingMats(){ return shippingMaterials; }
 	
 	//Setters
@@ -102,6 +104,7 @@ public class Database {
 	public static void setTimeStamps(TimeStamp[] s){ stamps = s; }
 	public static void setProductDescriptionTemplate(String s){ productDescriptionTemplate = s; }
 	public static void setPartDescriptionTemplate(String s){ partDescriptionTemplate = s; }
+	public static void setGenDescriptionTemplate(String s){ genDescriptionTemplate = s; }
 	public static void setShippingMats(Assembly x){ shippingMaterials = x; }
 	
 	//----- Advanced Methods

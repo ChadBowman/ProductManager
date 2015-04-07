@@ -53,6 +53,7 @@ public class ToolBar extends JToolBar
 		this.add(new Button("Sell", this, 35));
 		this.add(new Button("Return", this, 36));
 		this.add(new Button("Shipping Options", this, 37));
+		this.add(new Button("Inventory", this, 38));
 	}
 
 	//----- Interfaces
@@ -87,6 +88,7 @@ public class ToolBar extends JToolBar
 		case 35: SellPart.initalizeFrame(); break;
 		case 36: ReturnPart.intializeFrame(); break;
 		case 37: ShippingOptions.initializeFrame(); break;
+		case 38: InventoryMode.initializeFrame();
 		}
 		
 	}

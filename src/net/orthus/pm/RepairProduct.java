@@ -377,13 +377,13 @@ public class RepairProduct extends ActionFrame
 			sub = color[idx].getSelectedIndex();
 			
 			if(assems != null){
-				p.movePartFromSupply(pts[idx - assems.length][sub]);
+				p.movePartFromSupply(pts[idx - assems.length][sub], 1);
 				p.getParent().addUseRecord(new UseRecord(
 						pts[idx - assems.length][sub].getSerial(),
 						pts[idx - assems.length][sub].getQuantity(),
 						Date.getTodaysDate()));
 			}else{
-				p.movePartFromSupply(pts[idx][sub]);
+				p.movePartFromSupply(pts[idx][sub], 1);
 				p.getParent().addUseRecord(new UseRecord(
 						pts[idx][sub].getSerial(),
 						pts[idx][sub].getQuantity(),

@@ -16,11 +16,8 @@ import javax.swing.JTabbedPane;
 
 public class GUIEngine{
 	//----- Variables
-	private static JMenu menu;
 	private static JTabbedPane tPane;
-	private static JFrame gui;
-	private static JPanel summary;
-	
+	private static JFrame gui;	
 	private static UtilityBar util;
 
 	//----- Constants
@@ -36,7 +33,7 @@ public class GUIEngine{
 	
 	//----- Advanced Methods
 	private static void buildUI(){	
-		tPane.addTab("Summary", summary = SummaryBuilder.initializeSummary());	
+		tPane.addTab("Summary", SummaryBuilder.initializeSummary());	
 		
 		ProductCategory[] pc = Database.getProductCategories();
 		if(pc != null)

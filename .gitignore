@@ -50,3 +50,6 @@ Temporary Items
 .classpath
 .project
 .settings
+
+# Product Manager Image Backups
+ProductImageArchive

@@ -166,7 +166,7 @@ public class Product extends Item
 		
 	}//End movePartToSupply()
 	
-	public void movePartFromSupply(Part toMove){
+	public void movePartFromSupply(Part toMove, int quantity){
 		if(getParent().getPartSupply() == null) return; //No supply, no part
 		
 		
@@ -178,12 +178,12 @@ public class Product extends Item
 		clone.setStatus(Part.PRODUCT);
 
 		
-		if(pt.getQuantity() > toMove.getQuantity()){ //Decrement from supply
+		if(pt.getQuantity() > quantity){ //Decrement from supply
 			
-			pt.setQuantity(pt.getQuantity() - toMove.getQuantity()); //Decrement supply
+			pt.setQuantity(pt.getQuantity() - quantity); //Decrement supply
 			assembly.addPart(clone);	//Add to product
 			
-		}else if(pt.getQuantity() == toMove.getQuantity()){ //Remove from supply
+		}else if(pt.getQuantity() == quantity){ //Remove from supply
 			
 			getParent().removePartFromSupply(pt);
 			assembly.addPart(clone);
@@ -193,6 +193,9 @@ public class Product extends Item
 			getParent().removePartFromSupply(pt);
 			clone.setQuantity(pt.getQuantity());
 			assembly.addPart(clone);
+			
+			OptionPane.showError("Not enough parts in supply!\nRequested " 
+					+ quantity + ", delivered" + pt.getQuantity() + ".", "Insufficient Parts!");
 			
 		}
 	}//End movePartFromSupply()

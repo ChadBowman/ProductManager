@@ -1,5 +1,7 @@
 package net.orthus.pm;
 
+import java.util.ArrayList;
+
 import net.orthus.util.Sorter;
 
 public class Assembly extends Constituent
@@ -142,7 +144,11 @@ public class Assembly extends Constituent
 		return toReturn;
 	}
 	
-	//Returns array of all parts in assembly (including sub-assemblies)
+	/**
+	 * Returns array of all parts in assembly (including sub-assemblies)
+	 * @return
+	 * @deprecated	use collapse()
+	 */
 	public Part[] collapseAssembly(){
 		Part[] arr = null;
 		
@@ -157,6 +163,27 @@ public class Assembly extends Constituent
 		return arr;
 		
 	}//End collapseAssembly()
+	
+	/**
+	 * Adds all parts and parts of all sub-assemblies into a single ArrayList
+	 * 
+	 * @return	ArrayList of all Parts in Assembly.
+	 */
+	public ArrayList<Part> collapse(){
+		
+		ArrayList<Part> pts = new ArrayList<Part>();
+		
+		if(parts != null)
+			for(int i=0; i<parts.length; i++)
+				pts.add(parts[i]);
+		
+		if(assemblies != null)
+			for(int i=0; i<assemblies.length; i++)
+				pts.addAll(assemblies[i].collapse());
+					
+		return pts;
+		
+	}// End collapse
 	
 	///////////////////////////////////////////////////////////
 	
@@ -370,7 +397,12 @@ public class Assembly extends Constituent
 	
 	///////////////////////////////////////////////////////////
 	
-	//Returns part with same serial & color
+	/**
+	 * Searches this assembly for part matching serial, color, and status.
+	 * 
+	 * @param toFind	Part to search for in current assembly.
+	 * @return			Part in assembly with same serial, color, and status.
+	 */
 	public Part findEquivalentPart(Part toFind){
 	
 		if(parts != null)	//If parts exist in current layer

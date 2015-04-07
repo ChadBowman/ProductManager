@@ -7,6 +7,7 @@ public class Constituent{
 	protected String name, status, color;
 	protected Date datePurchased, dateListed, dateSold;
 	protected Credit listPrice, listFee, finalValueFee, payPalFee, shipCost, shipPaid;
+	protected Credit marketValue;
 	
 	//----- Constants
 	public static final String NO_COLOR = "NO COLOR";
@@ -112,7 +113,12 @@ public class Constituent{
 	public int getSerial(){ return serial; }
 	public int getQuantity(){ return quantity; }
 	public int getDuration(){ return duration; }
-	public int getNumPerListing(){ return numPerListing; }
+	public int getNumPerListing(){ 
+		
+		int ret = (numPerListing == 0)? 1 : numPerListing;
+		return ret; 
+	}
+	
 	public String getName(){ return name; }
 	public String getStatus(){ return status; }
 	public String getColor(){ return color; }
@@ -125,6 +131,7 @@ public class Constituent{
 	public Credit getPayPalFee(){ return payPalFee; }
 	public Credit getShippingCost(){ return shipCost; }
 	public Credit getShippingPaid(){ return shipPaid; }
+	public Credit getMarketValue(){ return marketValue; }
 	
 	//Setters
 	public void setSerial(int x){ serial = x; } 
@@ -143,6 +150,7 @@ public class Constituent{
 	public void setPayPalFee(Credit x){ payPalFee = x; }
 	public void setShippingCost(Credit x){ shipCost = x; }
 	public void setShippingPaid(Credit x){ shipPaid = x; }
+	public void setMarketValue(Credit x){ marketValue = x; }
 	
 	//----- Advanced Methods
 	public String record(){
@@ -160,6 +168,10 @@ public class Constituent{
 				serial, quantity, duration, name, status, color, d, d2, d3, c, c2, c3, c4, c5, c6); 
 	}
 	
+	/**
+	 * 
+	 * @return	Quantity/number per listing
+	 */
 	public int getEffectiveQuantity(){
 		numPerListing = (numPerListing == 0)? 1: numPerListing;
 		
@@ -214,6 +226,13 @@ public class Constituent{
 	}
 	
 	//Phantom Method
+	public Credit calculateValue(){
+		
+		System.err.println("Tried to use calculateValue() in Constituent");
+		return new Credit();
+	}
+	
+	//Phantom Method
 	public Credit getUltimateCost(){
 		System.err.println("Tried to use getUltimateCost() in Constituent");
 		return new Credit();
@@ -261,6 +280,12 @@ public class Constituent{
 		return false;
 	}
 	
+	/**
+	 * Checks serial, color, and status.
+	 * 
+	 * @param a		Part to compare against.
+	 * @return		True if both parts have the same serial, color, and status. Else false.
+	 */
 	public boolean equivalent(Constituent a){
 	
 		if(serial == a.getSerial() && checkColors(a) && checkStatus(a))

@@ -239,7 +239,7 @@ public class ListProduct extends ActionFrame
 				GUIEngine.refresh(-1, -1);
 				frame.dispose();
 				
-			}break;
+			} break;
 			
 		case 2: //Upload images
 			

@@ -63,8 +63,10 @@ public class ModifyCategory extends ActionFrame
 		right.setLayout(new BoxLayout(right, BoxLayout.Y_AXIS));
 		
 		//Data initialization
-		templates = new Assembly[1];
-		templates[0] = cat.getDefaultAssembly();
+		templates = new Assembly[cat.getTemplates().length];
+		
+		for(int i=0; i<cat.getTemplates().length; i++)
+			templates[i] = cat.getTemplates()[i];
 		
 		
 		
@@ -288,8 +290,8 @@ public class ModifyCategory extends ActionFrame
 
 				
 				//cat.setName(name.getText()); //TODO Not working
-				cat.setProductFinalValueFeeRate(Double.parseDouble(feeRateField2.getText()) / 100);
-				cat.setServiceFinalValueFeeRate(Double.parseDouble(feeRateField.getText()) / 100);
+				cat.setProductFinalValueFeeRate(Double.parseDouble(feeRateField.getText()) / 100);
+				cat.setServiceFinalValueFeeRate(Double.parseDouble(feeRateField2.getText()) / 100);
 				cat.setTemplates(templates);
 				cat.setColors(colors);
 				

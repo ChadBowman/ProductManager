@@ -1,5 +1,7 @@
 package net.orthus.pm;
 
+import java.util.ArrayList;
+
 
 public class Category {
 	//----- Variables
@@ -65,6 +67,7 @@ public class Category {
 		for(int i=0; i<assemblies.length; i++)
 			if(assemblies[i].getStatus().equals(Assembly.PART_SUPPLY))
 				return assemblies[i];
+		
 		return null;	//If none found
 	}
 	
@@ -384,7 +387,46 @@ public class Category {
 		return ret;
 	}
 	
-	//Not sure what method is used for //TODO
+	/**
+	 * Gathers all constituents (Parts and Assemblies) in the Supply Assembly of this Category.
+	 * 
+	 * @param status	Array of status to consider
+	 * @return			List of all Parts and Assemblies with any of the status' in the status array.
+	 */
+	public ArrayList<Constituent> getSupplyConstituentsByStatus(String[] status){
+		
+		// Grab supply assembly
+		Assembly a = getPartSupply();
+		
+		// Check for empty
+		if(a == null || status == null) return null;
+		
+		// Initialize List
+		ArrayList<Constituent> toRet = new ArrayList<Constituent>();
+		
+		for(int i=0; i<status.length; i++){ // For each status to consider
+			
+			if(a.getParts() != null)
+				for(int j=0; j<a.getParts().length; j++)
+					if(status[i].equals(a.getParts()[j].getStatus()))
+						toRet.add(a.getParts()[j]);
+			
+			if(a.getAssemblies() != null)
+				for(int j=0; j<a.getAssemblies().length; j++)
+					if(status[i].equals(a.getAssemblies()[j].getStatus()))
+						toRet.add(a.getAssemblies()[j]);
+		
+		}
+		
+		return toRet;
+		
+	} // END getSupplyConstituentsByStatus()
+	
+	/**
+	 * @param status
+	 * @return
+	 * @deprecated		Use ArrayList version.
+	 */
 	public Constituent[] getSupplyConstituentsByStatus(String status){
 		Assembly a = getPartSupply();
 		Constituent[] toRet = null;

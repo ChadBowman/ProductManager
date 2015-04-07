@@ -40,6 +40,19 @@ public class StatManager {
 	public String comRepair(){ return "" + comR; }
 	public String retRepair(){ return "" + retR; }
 	
+	public float getHoursWorked(int month, int year){
+		
+		TimeStamp[] stamps = Database.getTimeStamps();
+				
+		int seconds = 0;
+		
+		for(int i=0; i<stamps.length; i++)
+			if(stamps[i].getStart().getMonth() == month && stamps[i].getStart().getYear() == year)
+				seconds += stamps[i].getTimeWorkedSeconds();
+		
+		return (float) (seconds / 3600.0);
+	}
+	
 	private void setStatus(){
 		
 		ProductCategory[] pro = Database.getProductCategories();
@@ -80,6 +93,63 @@ public class StatManager {
 		return ret;
 	}
 	
+	public Credit getProfit(int month, int year){
+		Credit ret = new Credit();
+		Credit cost = new Credit();
+		ProductCategory[] prod = Database.getProductCategories();
+		
+		if(prod != null) //Add all Product profits
+			for(int i=0; i<prod.length; i++)
+				if(prod[i].getProductsByStatus(Product.SOLD) != null){
+					Product[] p = prod[i].getProductsByStatus(Product.SOLD);
+					
+					for(int j=0; j<p.length; j++)
+							if(p[j].getDateSold().getMonth() == month
+									&& p[j].getDateSold().getYear() == year){
+								ret.add(p[j].getProfit());
+								cost.add(p[j].getUltimateCost());
+								monthR.add(p[j].getSellAmount().getValueInDollars() 
+										+ p[j].getShippingPaid().getValueInDollars());
+							}
+					
+				}
+		
+		
+		ServiceCategory[] serv = Database.getAllServiceCategories();
+		
+		if(serv != null)
+			for(int i=0; i<serv.length; i++){
+				if(serv[i].getAllRepairsByStatus(Repair.COMPLETE) != null){
+					Repair[] r = serv[i].getAllRepairsByStatus(Repair.COMPLETE);
+					
+					for(int j=0; j<r.length; j++) //Add all Service profits
+						
+						if(r[j].getDateRepaired() != null)
+								if(r[j].getDateRepaired().getMonth() == month
+										&& r[j].getDateRepaired().getYear() == year){
+									ret.add(r[j].getProfit());
+									cost.add(r[j].getUltimateCost());
+									monthR.add(r[j].getSellAmount().getValueInDollars() 
+											+ r[j].getShippingPaid().getValueInDollars());
+								} 
+			}
+				
+				if(serv[i].getSupplyConstituentsByStatus(Constituent.SOLD) != null){
+					Constituent[] c = serv[i].getSupplyConstituentsByStatus(Constituent.SOLD);
+					
+					for(int j=0; j<c.length; j++) //Add all Part profits
+							if(c[j].getDateSold().getMonth() == today.getMonth()
+									&& c[j].getDateSold().getYear() == today.getYear()){
+								ret.add(c[j].getProfit());
+								cost.add(c[j].getUltimateCost());
+								monthR.add(c[j].getListPrice().getValueInDollars()
+										+ c[j].getShippingPaid().getValueInDollars());
+							}
+				}
+			}
+		
+		return ret;
+	}
 	
 	public Credit getProfit(int type){
 		Credit ret = new Credit();

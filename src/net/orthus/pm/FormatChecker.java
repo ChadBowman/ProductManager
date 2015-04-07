@@ -15,6 +15,24 @@ public class FormatChecker {
 		return true;
 	}
 	
+	public static boolean commaCostCheck(String input){
+		
+		String[] str = input.split(",");
+		
+		try{
+			Double.parseDouble(str[0]);
+			Double.parseDouble(str[1]);
+			
+			return true;
+			
+		}catch(Exception e){
+			
+			OptionPane.showError("Use format: 0.00,0.00", "Cost Format Error!");
+			return false;
+		}
+		
+	}
+	
 	public static boolean percentageCheck(String input){
 		double test;
 		try{

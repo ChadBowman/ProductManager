@@ -221,7 +221,7 @@ public class AquireRepair extends ActionFrame
 			
 
 			
-			Assembly rep = new Assembly(
+			r.setAssembly(new Assembly(
 					Database.getNewSerial(),
 					1,
 					0,
@@ -234,23 +234,23 @@ public class AquireRepair extends ActionFrame
 					null,
 					null,
 					null,
-					null);
+					null));
 			
-			if(cons != null){
-				for(int i=0; i<cons.length; i++){
+			// Move parts from supply to hold in repair.
+			
+			if(cons != null)
+				for(int i=0; i<cons.length; i++)
 					try{
 						Assembly a = (Assembly) cons[i];
-						cat.removeAssemblyFromSupply(a); //Remove
-						rep.addAssembly(a); //Add
+						r.moveAssemblyFromSupply(a);
+						
 					}catch(ClassCastException e){
 						Part p = (Part) cons[i];
-						cat.removePartFromSupply(p); //Remove
-						rep.addPart(p); //Add
+						r.movePartFromSupply(p, 1);
 					}
-				}
-			}
+				
 			
-			r.setAssembly(rep);
+			
 			r.setStatus(Repair.PENDING);
 			
 			Thread t = new Thread(new Runnable(){
@@ -298,6 +298,15 @@ public class AquireRepair extends ActionFrame
 			//Reverse ebay
 			Database.addToEbayBalance(Date.getTodaysDate().getMonth(), 
 					new Credit(-1 * r.getFinalValueFee().getValueInDollars()));
+			
+			//Place assembies/parts back in supply
+			if(r.getAssembly().getAssemblies() != null)
+				for(int i=0; i<r.getAssembly().getAssemblies().length; i++)
+					r.moveAssemblyToSupply(r.getAssembly().getAssemblies()[i]);
+			
+			if(r.getAssembly().getParts() != null)
+				for(int i=0; i<r.getAssembly().getParts().length; i++)
+					r.movePartToSupply(r.getAssembly().getParts()[i]);
 			
 			r.getParent().removeRepair(r);
 			

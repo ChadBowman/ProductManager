@@ -78,7 +78,7 @@ public class ImageManager extends JPanel
 	private String[] gatherNames(){
 		pics = new File("D:/DCIM/100CANON").listFiles();
 		
-		String[] names = new String[pics.length];
+		String[] names = (pics == null)? new String[0]: new String[pics.length];
 		for(int i=0; i<names.length; i++)
 			names[i] = pics[i].getName();
 		
@@ -113,12 +113,13 @@ public class ImageManager extends JPanel
 		
 		try {
 			BufferedImage img = ImageIO.read(image);
-			BufferedImage overlay = ImageIO.read(new File("Images/ProductOverlay.gif"));
-			BufferedImage combined = new BufferedImage(2048, 1536, BufferedImage.TYPE_INT_RGB);
+		
+			BufferedImage overlay = ImageIO.read(new File("Images/ProductPictureOverlay.png"));
+			BufferedImage combined = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
 			
 			Graphics g = combined.getGraphics();
 			g.drawImage(img, 0, 0, null);
-			g.drawImage(overlay, 0, 0, null);
+			g.drawImage(overlay, 0, img.getHeight() - overlay.getHeight(), null);
 			
 			ImageIO.write(combined, "JPG", target);
 			
@@ -195,6 +196,8 @@ public class ImageManager extends JPanel
 		case ProductCategory.DS3_XL:
 			upPath = "3dx/prt/"; break;
 		}
+				
+		
 		
 		String tag = c.getName().replaceAll(" ", "") + c.getSerial();
 		

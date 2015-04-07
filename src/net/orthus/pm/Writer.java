@@ -132,6 +132,7 @@ public class Writer extends BufferedWriter {
 		
 			writer.encrln(Database.getProductDescriptionTemplate());
 			writer.encrln(Database.getPartDescriptionTemplate());
+			writer.encrln(Database.getGenericDescriptionTemplate());
 			
 			writer.flush();
 			
